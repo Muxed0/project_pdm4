@@ -1,0 +1,46 @@
+[gd_scene load_steps=9 format=3 uid="uid://cvkijv33eq3p4"]
+
+[ext_resource type="Texture2D" uid="uid://4jv8dhn5ygev" path="res://entities/employees/pc_bv01.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://fb61v83udk7m" path="res://entities/employees/basic_chars.png" id="2"]
+[ext_resource type="Script" path="res://entities/employees/pawn.gd" id="3"]
+[ext_resource type="Script" path="res://entities/employees/selection_hitbox.gd" id="4"]
+[ext_resource type="Script" path="res://entities/employees/railbox.gd" id="5"]
+
+[sub_resource type="SegmentShape2D" id="4"]
+a = Vector2(0, -21)
+b = Vector2(0, 21)
+
+[sub_resource type="SpriteFrames" id="3"]
+animations = [{
+"frames": [ExtResource( "2" ), ExtResource( "1" )],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="2"]
+radius = 14.0
+height = 42.0
+
+[node name="pawn" type="Node2D"]
+script = ExtResource( "3" )
+
+[node name="railbox" type="Area2D" parent="."]
+script = ExtResource( "5" )
+
+[node name="railbox_shape" type="CollisionShape2D" parent="railbox"]
+shape = SubResource( "4" )
+
+[node name="basic_sprite" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.05, 0.05)
+frames = SubResource( "3" )
+
+[node name="hitbox" type="Area2D" parent="." groups=["pawn"]]
+script = ExtResource( "4" )
+
+[node name="hitbox_shape" type="CollisionShape2D" parent="hitbox"]
+shape = SubResource( "2" )
+
+[connection signal="area_shape_entered" from="railbox" to="railbox" method="_on_railbox_area_shape_entered"]
+[connection signal="area_shape_exited" from="railbox" to="railbox" method="_on_railbox_area_shape_exited"]
+[connection signal="area_entered" from="hitbox" to="hitbox" method="_on_selection_hitbox_area_entered"]
